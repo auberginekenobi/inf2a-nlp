@@ -221,8 +221,8 @@ class TestC(unittest.TestCase):
         b = all_valid_parses(lx,['which','sheep','ducks','and','die','?'])
         self.assertEquals(b,[])
 
-        a = all_parses(['who','are','ducks','?'],lx)
-        b = all_valid_parses(lx,['who','are','ducks','?'])
+        a = all_parses(['who','is','a','duck','?'],lx)
+        b = all_valid_parses(lx,['who','is','a','duck','?'])
         self.assertEquals(a,b)
         self.assertNotEqual(a,[])
         b = all_valid_parses(lx,['who','are','duck''?'])

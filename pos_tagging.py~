@@ -92,7 +92,7 @@ def tag_word (lx,wd):
                     posspos.append(char+'s')
                 else:
                     posspos.append(char+'p')
-    return list(set(posspos))
+    return posspos
                 
 
 def tag_words (lx, wds):
