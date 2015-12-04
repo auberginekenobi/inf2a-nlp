@@ -88,6 +88,8 @@ def N_phrase_num(tr):
     """returns the number attribute of a noun-like tree, based on its head noun"""
     if (tr.label() == 'N'):
         return tr[0][1]  # the s or p from Ns or Np
+    elif (tr.label() == 'P'):
+        return 's' #proper names always treated as singular
     elif (tr.label() == 'Nom'):
         return N_phrase_num(tr[0])
         # add code here
@@ -134,7 +136,13 @@ def check_node(tr):
     elif (rule == 'NP -> Nom'):
         return (N_phrase_num(tr[0]) == 'p')
     elif (rule == 'Nom -> AN Rel'):
-        return (matches(N_phrase_num(tr[0]),V_phrase_num(tr[1])))
+        if top_level_rule(tr[1]) == 'Rel -> WHO VP':
+            return (matches(N_phrase_num(tr[0]),V_phrase_num(tr[1])))
+        else:
+            return (check_node(tr[1]))
+                # ^ need to look ahead to see which Rel rule used.
+                # if Rel -> WHO VP, check that AN and Rel agree.
+                # if Rel -> NP T, check that the subtrees of Rel agree.
     elif (rule == 'Rel -> NP T'):
         return (matches(N_phrase_num(tr[0]),V_phrase_num(tr[1])))
     return True

@@ -18,13 +18,65 @@ def sem(tr):
         return tr[0][0]
     elif (tr.label() == 'N'):
         return '(\\x.' + tr[0][0] + '(x))'  # \\ is escape sequence for \
-    elif  # add code here
+    # add code here
+    elif (tr.label() == 'A'): 
+        return '(\\x.' + tr[0][0] + '(x))'
+        #return tr[0][0]
+    elif (tr.label() == 'I'):
+        return '(\\x.' + tr[0][0] + '(x))'
+    elif (tr.label() == 'T'):
+        return '(\\x.\\y.' + tr[0][0] + '(x,y))'
     
     elif (rule == 'AN -> A AN'):
         return '(\\x.(' + sem(tr[0]) + '(x) & ' + sem(tr[1]) + '(x)))'
     elif (rule == 'NP -> P'):
-        return '(\\x.(x = ' + sem(tr[0]) + '))'
-    elif  # add more code here
+        return '(\\x.(x = ' + sem(tr[0]) + ')(x))'
+    # add code here
+    elif (rule == 'S -> WHO QP QM'):
+        return '(\\x.(' + sem(tr[1]) + ')(x))'
+    elif (rule == 'S -> WHICH Nom QP QM'):
+        return '(\\x.(' + sem(tr[1]) + '(x) & ' + sem(tr[2]) + '(x)))'
+    elif (rule == 'QP -> VP'):
+        return '(\\x.(' + sem(tr[0]) + ')(x))'
+    elif (rule == 'QP -> DO NP T'):
+        a = '(\\x.((\\P.P(x))('+sem(tr[1])+'))(y))'
+        b = '(\\y.((\\P.P(y,x))('+sem(tr[2])+'))(y))'
+        return '(\\x.(exists y.('+a+' & '+b+')))'
+        #return '(\\x.(exists y.(\\x.(' + sem(tr[1]) + ')(y) & ' + sem(tr[2]) + '(y,x))))'
+    elif (rule == 'VP -> I'):
+        return '(\\x.(' + sem(tr[0]) + ')(x))'
+    elif (rule == 'VP -> T NP'):
+        # missing some parentheses compared to the example, but functionally equivalent
+        # because (A & B) & (C & D) = A & B & C & D
+        a = '(\\x.((\\P.P(x))('+sem(tr[1])+'))(y))'
+        b = '(\\y.((\\P.P(x,y))('+sem(tr[0])+'))(y))'
+        return '(\\x.(exists y.('+a+' & '+b+')))'
+        #past attempts, still not sure why they're incorrect, but they fail tests.
+        #return '(\\x.(exists y.(\\x.(' + sem(tr[1]) + ')(y) & ' + sem(tr[0]) + '(x,y))))'
+        #return '(\\x.(exists y.((' + sem(tr[1]) + ')(y) & ' + sem(tr[0]) + '(x,y))))'
+    elif  (rule == 'VP -> BE A'):
+        return '(\\x.(' + sem(tr[1]) + ')(x))'
+    elif (rule == 'VP -> BE NP'):
+        return '(\\x.(' + sem(tr[1]) + ')(x))'
+    elif (rule == 'VP -> VP AND VP'):
+        return '(\\x.(' + sem(tr[0]) + '(x) & ' + sem(tr[2]) + '(x)))'
+    elif (rule == 'NP -> AR Nom'):
+        return '(\\x.(' + sem(tr[1]) + ')(x))'
+    elif (rule == 'NP -> Nom'):
+        return '(\\x.(' + sem(tr[0]) + ')(x))'
+    elif (rule == 'Nom -> AN'):
+        return '(\\x.(' + sem(tr[0]) + ')(x))'
+    elif (rule == 'Nom -> AN Rel'):
+        return '(\\x.(' + sem(tr[0]) + '(x) & ' + sem(tr[1]) + '(x)))'
+    elif (rule == 'AN -> N'):
+        return '(\\x.(' + sem(tr[0]) + ')(x))'
+    elif (rule == 'Rel -> WHO VP'):
+        return '(\\x.(' + sem(tr[1]) + ')(x))'
+    elif (rule == 'Rel -> NP T'):
+        a = '(\\x.((\\P.P(x))('+sem(tr[0])+'))(y))'
+        b = '(\\y.((\\P.P(y,x))('+sem(tr[1])+'))(y))'
+        return '(\\x.(exists y.('+a+' & '+b+')))'
+        #return '(\\x.(exists y.((' + sem(tr[0]) + ')(y) & ' + sem(tr[1]) + '(y,x))))'
 
 
 # Logic parser for lambda expressions

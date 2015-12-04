@@ -7,7 +7,7 @@ Owen Chapman
 import unittest
 #from statements import *
 #from pos_tagging import *
-from agreement import *
+from semantics import *
 
 
 global corpus, lx, fb
@@ -197,6 +197,7 @@ class TestC(unittest.TestCase):
         b = all_valid_parses(lx,['who','is','a','duck','John','ducks','?'])
         self.assertEquals(b,[])
         b = all_valid_parses(lx,['who','is','a','duck','John','eat','?'])
+        # but maybe this should pass...
         self.assertEquals(b,[])
         a = all_parses(['who','is','a','duck','who','ducks','?'],lx)
         b = all_valid_parses(lx,['who','is','a','duck','who','ducks','?'])
@@ -242,6 +243,35 @@ class TestC(unittest.TestCase):
         
         
 suite = unittest.TestLoader().loadTestsFromTestCase(TestC)
-unittest.TextTestRunner(verbosity=2).run(suite)        
+unittest.TextTestRunner(verbosity=2).run(suite)
 
+
+def runAll(wdlst):
+    tr0 = all_valid_parses(lx,wdlst)[0]
+    tr = restore_words(tr0,wdlst)
+    A = lp.parse(sem(tr))
+    print A.simplify()
+    
+tr0 = all_valid_parses(lx, ['Who','is','a','purple','duck','?'])[0]
+#tr0.draw()
+tr = restore_words(tr0,['Who','is','a','purple','duck','?'])
+
+#A = lp.parse(sem(tr0))
+B = lp.parse(sem(tr))  # for some tree tr
+#print A.simplify()
+print B.simplify()
+tr0 = all_valid_parses(lx, ['Who','is','John','?'])[0]
+tr = restore_words(tr0,['Who','is','John','?'])
+A = lp.parse(sem(tr))
+print A.simplify()
+
+runAll('Who is blue ?'.split())
+runAll('Who ducks and dies ?'.split())
+runAll('Who does John like ?'.split())
+runAll('Which purple duck likes a woman ?'.split())
+runAll('Which purple duck likes John ?'.split())
+runAll('Who is a woman who ducks ?'.split())
+runAll('Who is a woman John eats ?'.split())
+runAll('Who is a woman ducks eat ?'.split())
+runAll('Who is a woman who eats ducks ?'.split())
 

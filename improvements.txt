@@ -1,0 +1,11 @@
+improvements.txt
+There are two major improvements that I would see as highest-priority for improving this system.  The first 
+obvious improvement is to expand the size of the database against which verbs are identified as verbs, or at least
+to notify users of the dialogue protocol that the verb they are trying to use is not in the corpus.  A message 
+such as 'I don't know how to twerk' would be fairly easy to implement on top of the checking we do in the Brown
+corpus.  But the system should know how to duck, which could be implemented by using a larger corpus, or even 
+several corpora.  I also think a high-priority expansion should be object noun clauses.  It's a bit strange that 
+the system accepts that 'John eats Mary' but refuses to believe that 'John eats cereal.'  Again, I don't think this 
+would be a major overhaul of the system, as the grammar already includes proper object nouns.  Such an inclusion 
+could lead to interesting ambiguous interpretations, such as 'John shows a duck,' and whether this means he puts 
+the duck on display or gives it something to look at.

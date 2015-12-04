@@ -68,7 +68,7 @@ def tag_word (lx,wd):
     posspos = [] # possible parts of speech
     # check special words
     for pair in function_words_tags:
-        if wd == pair[0].lower():
+        if wd == pair[0]:
             posspos.append(pair[1])
     # check lexicon
     nwd = noun_stem(wd)

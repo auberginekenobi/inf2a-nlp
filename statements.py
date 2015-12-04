@@ -28,6 +28,7 @@ class Lexicon:
     
 
 class FactBase:
+    """stores a database of facts"""
     # add code here
     def __init__(self):
         self.db = []
@@ -56,66 +57,53 @@ re5 = re.compile('[A-z]*([ox]es|[cs]hes|sses|zzes)$')
 re6 = re.compile('[A-z]*([^s]ses|[^z]zes)$')
 re7 = re.compile(r'\Ahas$')
 re8 = re.compile('[A-z]*([^iosxz]es|[^cs]hes)$')
+
+# making a dictionary for faster search
 posdict = {}
-for (word, pos) in brown.tagged_words():
+brownwords = set(brown.tagged_words())
+for (word, pos) in brownwords:
     if word in posdict:
         posdict[word].append(pos)
         posdict[word] = list(set(posdict[word]))
     else:
         posdict[word] = [pos]
-# for testing purposes
-posdict['analyses']='VBZ'
-posdict['fizzes'] = 'VBZ'
-posdict['boxes'] = 'VBZ'
-posdict['washes'] = 'VBZ'
-posdict['dresses'] = 'VBZ'
-posdict['dazes'] = 'VBZ'
-posdict['bathes'] = 'VBZ'
-posdict['ducks'] = 'VBZ'
+        
+# for testing purposes. 'ducks' is a very important verb in my test cases.
+##posdict['analyses']='VBZ'
+##posdict['fizzes'] = 'VBZ'
+##posdict['boxes'] = 'VBZ'
+##posdict['washes'] = 'VBZ'
+##posdict['dresses'] = 'VBZ'
+##posdict['dazes'] = 'VBZ'
+##posdict['bathes'] = 'VBZ'
+##posdict['ducks'] = 'VBZ'
 def verb_stem(s):
     """extracts the stem from the 3sg form of a verb, or returns empty string"""
     # add code here
-##    print s
-    # case 7
+    # case 7 - has --> have
     if re.match(re7,s):
-##    if s == 'has':
-##        print 7
         return 'have'
     if (s in posdict and ('VBZ' in posdict[s])) or s=='does':
-    # case 3
+        # case 3 - flies --> fly
         if re.match(re3,s):
-    ##    if len(s)>=4 and s[-3:] == 'ies' and s[-4] not in vowels and len(s)>=5:
-    ##        print 3
             return s[:-3]+'y'
-        # case 5
+        # case 5 - goes --> go
         if re.match(re5,s):
-    ##    if len(s)>=4 and s[-2:]=='es' and (s[-3] in 'ox' or s[-4:-2] in 'ch sh ss zz'):
-    ##        print 5
             return s[:-2]
-        # case 1
+        # case 1 - eats --> eat
         if re.match(re1,s):
-    ##    if len(s)>=3 and s[-2] not in ('sxyz'+vowels) and s[-3:-1] not in 'ch sh':
-    ##        print 1
             return s[:-1]
-        # case 2
+        # case 2 - pays --> pay
         if re.match(re2,s):
-    ##    if len(s)>=3 and s[-2] == 'y' and s[-3] in vowels:
-    ##        print 2
             return s[:-1]
-        # case 4
+        # case 4 - dies --> die
         if re.match(re4,s):
-    ##    if len(s) ==4 and s[1:] == 'ies':
-    ##        print 4
             return s[:-1]
-        # case 6
+        # case 6 - analyzes --> analyze
         if re.match(re6,s):
-    ##    if len(s)>=4 and s[-3:-1] in 'se ze' and s[-4:-1] not in 'sse zze':
-    ##        print 6
             return s[:-1]
-        # case 8
+        # case 8 - likes --> like
         if re.match(re8,s):
-    ##    if len(s)>=4 and s[-2] == 'e' and (s[-3] not in 'iosxz' or s[-4:-2] not in 'ch sh'):
-    ##        print 8
             return s[:-1]
     return ""
     
